@@ -1,0 +1,362 @@
+/* RESTORED APP.CSS */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    /* DARK MODE (Black & Metallic Gold) */
+    --bg-color: #050505;
+    --card-bg: rgba(20, 20, 20, 0.7);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --text-color: #ffffff;
+    --text-muted: #9ca3af;
+
+    /* Metallic Gold Accent */
+    --accent-color: #D4AF37;
+    --accent-hover: #eac746;
+    --button-text: #000000;
+
+    --border-color: rgba(255, 255, 255, 0.08);
+    --input-border: rgba(255, 255, 255, 0.08);
+
+    /* Glow Blob Color matching Gold */
+    --blob-color: rgba(212, 175, 55, 0.2);
+
+    --shine-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+html.light-mode {
+    /* LIGHT MODE (White & Gold) */
+    --bg-color: #f8f9fa;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --input-bg: #ffffff;
+    --text-color: #1a1a1a;
+    --text-muted: #6b7280;
+
+    /* Metallic Gold Accent */
+    --accent-color: #D4AF37;
+    --accent-hover: #eac746;
+    --button-text: #000000;
+
+    --border-color: rgba(0, 0, 0, 0.05);
+    --input-border: #e2e8f0;
+
+    /* Glow Blob Color */
+    --blob-color: rgba(212, 175, 55, 0.4);
+
+    --shine-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 100%);
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.03) 0px, transparent 50%);
+    color: var(--text-color);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    width: 100%;
+}
+
+/* --- GLOSS CARD --- */
+.custom-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    background-image: var(--shine-gradient);
+
+    border: 1px solid var(--border-color);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* Highlight */
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    border-radius: 36px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+html.light-mode .custom-card {
+    box-shadow:
+        0 25px 80px -20px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.custom-card::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--blob-color) 0%, transparent 70%);
+    filter: blur(50px);
+    z-index: 0;
+    pointer-events: none;
+    transition: background 0.4s ease;
+}
+
+/* Typography */
+h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+}
+
+html:not(.light-mode) h2 {
+    color: #fff;
+    background: linear-gradient(180deg, #ffffff 0%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+html.light-mode h2 {
+    color: #1a1a1a;
+}
+
+h1.title {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+html:not(.light-mode) h1.title {
+    background: linear-gradient(135deg, #fce570 0%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+html.light-mode h1.title {
+    background: linear-gradient(135deg, #d4af37 0%, #fce570 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+/* --- INPUTS --- */
+.custom-input {
+    width: 100%;
+    padding: 18px 24px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 100px;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+html.light-mode .custom-input {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.custom-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+}
+
+textarea.custom-input {
+    border-radius: 24px;
+}
+
+/* --- BUTTONS --- */
+.btn-primary-custom {
+    background: var(--accent-color);
+    color: var(--button-text);
+    border: none;
+    border-radius: 100px;
+    padding: 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    /* Fix for Link components */
+
+    box-shadow:
+        0 10px 20px -10px var(--blob-color),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary-custom::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: 0.5s;
+}
+
+.btn-primary-custom:hover::after {
+    left: 100%;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-3px) scale(1.02);
+    background-color: var(--accent-hover);
+    box-shadow:
+        0 15px 30px -10px var(--blob-color),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.link-custom {
+    color: #c5a005;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: opacity 0.2s;
+}
+
+html:not(.light-mode) .link-custom {
+    color: var(--accent-color);
+}
+
+.link-custom:hover {
+    opacity: 0.8;
+}
+
+/* --- TOGGLE --- */
+.theme-toggle {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 20;
+    border: none;
+    backdrop-filter: blur(10px);
+}
+
+html:not(.light-mode) .theme-toggle {
+    background: rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+html.light-mode .theme-toggle {
+    background: #ffffff;
+    border: 1px solid #eee;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+html.light-mode .theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.toggle-password {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn-outline-custom {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+html.light-mode .btn-outline-custom {
+    border-color: #cbd5e1;
+}
+
+.btn-outline-custom:hover {
+    background: var(--input-bg);
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    margin-top: 8px;
+    margin-left: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.strength-weak {
+    color: #ff5f5f;
+}
+
+.strength-medium {
+    color: #ffb700;
+}
+
+.strength-strong {
+    color: #00e074;
+}
