@@ -16,11 +16,11 @@ func InitRedis() {
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
 	}
-	redisPassword := os.Getenv("REDIS_PASSWORD") // Load password
+	redisPassword := os.Getenv("REDIS_PASSWORD") 
 
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     redisAddr,
-		Password: redisPassword, // Set password
+		Password: redisPassword, 
 		DB:       0,
 	})
 	if _, err := RedisClient.Ping(context.Background()).Result(); err != nil {

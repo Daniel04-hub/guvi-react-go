@@ -62,7 +62,7 @@ const Profile = () => {
     };
 
     const validateAge = (dob, age) => {
-        if (!dob || !age) return true; // Skip if empty
+        if (!dob || !age) return true; 
         const birthDate = new Date(dob);
         const today = new Date();
         let calculatedAge = today.getFullYear() - birthDate.getFullYear();
@@ -75,7 +75,7 @@ const Profile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage(''); // Clear previous messages
+        setMessage(''); 
 
         if (!validatePhoneNumber(profile.contact, countryCode)) {
             setMessage(`Invalid phone number for ${countryCode}. Must be 10 digits.`);

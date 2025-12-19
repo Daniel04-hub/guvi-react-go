@@ -33,14 +33,14 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	email, ok := r.Context().Value(middleware.UserKey).(string)
 	if !ok {
-		log.Println("Profile Update Failed: User context missing") // Added log
+		log.Println("Profile Update Failed: User context missing") 
 		http.Error(w, "Server Error: user context missing", http.StatusInternalServerError)
 		return
 	}
 
 	var profile models.Profile
 	if err := json.NewDecoder(r.Body).Decode(&profile); err != nil {
-		log.Println("Profile Update Failed: JSON Decode Error:", err) // Added log
+		log.Println("Profile Update Failed: JSON Decode Error:", err) 
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
@@ -53,10 +53,10 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	opts := options.Update().SetUpsert(true)
 	coll := db.MongoClient.Database("guvi_db").Collection("profiles")
 
-	_, err := coll.UpdateOne(context.Background(), filter, update, opts) // Changed context.TODO() back to context.Background()
+	_, err := coll.UpdateOne(context.Background(), filter, update, opts) 
 	if err != nil {
-		log.Println("Profile Update Failed: MongoDB Error:", err) // Added log
-		http.Error(w, "Failed to update profile", http.StatusInternalServerError) // Changed error message
+		log.Println("Profile Update Failed: MongoDB Error:", err) 
+		http.Error(w, "Failed to update profile", http.StatusInternalServerError) 
 		return
 	}
 
