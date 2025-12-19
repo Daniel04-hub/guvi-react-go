@@ -14,19 +14,16 @@ import (
 )
 
 func GetProfile(w http.ResponseWriter, r *http.Request) {
-	// 1. Get email from context (set by middleware)
 	email, ok := r.Context().Value(middleware.UserKey).(string)
 	if !ok {
 		http.Error(w, "Server Error: user context missing", http.StatusInternalServerError)
 		return
 	}
 
-	// 2. Fetch from MongoDB
 	coll := db.MongoClient.Database("guvi_db").Collection("profiles")
 	var profile models.Profile
 	err := coll.FindOne(context.Background(), bson.M{"email": email}).Decode(&profile)
 	if err != nil {
-		// Return basic info if no profile doc exists yet
 		profile = models.Profile{Email: email}
 	}
 
@@ -41,7 +38,6 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Decode JSON
 	var profile models.Profile
 	if err := json.NewDecoder(r.Body).Decode(&profile); err != nil {
 		log.Println("Profile Update Failed: JSON Decode Error:", err) // Added log
@@ -49,11 +45,8 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Force email to match token
 	profile.Email = email
 
-	// 2. Upsert into MongoDB
-	// Use Email as the key (from auth middleware context)
 	filter := bson.M{"email": email}
 	update := bson.M{"$set": profile}
 

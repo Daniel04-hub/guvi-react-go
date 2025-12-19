@@ -22,7 +22,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Check if email exists
 	var existsID int
 	err := db.SQLClient.QueryRow("SELECT id FROM users WHERE email = ?", req.Email).Scan(&existsID)
 	if err == nil {
@@ -37,7 +36,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Hash password
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -46,7 +44,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Insert User
 	stmt, err := db.SQLClient.Prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)")
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")

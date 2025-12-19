@@ -77,13 +77,11 @@ const Profile = () => {
         e.preventDefault();
         setMessage(''); // Clear previous messages
 
-        // 1. Validate Phone
         if (!validatePhoneNumber(profile.contact, countryCode)) {
             setMessage(`Invalid phone number for ${countryCode}. Must be 10 digits.`);
             return;
         }
 
-        // 2. Validate Age vs DOB
         if (!validateAge(profile.dob, profile.age)) {
             setMessage('Age does not match Date of Birth.');
             return;

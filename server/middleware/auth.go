@@ -11,10 +11,8 @@ type key int
 
 const UserKey key = 0
 
-// Auth middleware validates the Bearer token against Redis
 func Auth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Enable CORS pre-flight handling handled by main CORS, but if checks fail here common method
 		if r.Method == "OPTIONS" {
 			next(w, r)
 			return
@@ -34,14 +32,12 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 
 		token := parts[1]
 		
-		// Check Redis
 		email, err := db.RedisClient.Get(context.Background(), token).Result()
 		if err != nil {
 			http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 			return
 		}
 
-		// Token is valid, email is in value. Pass it to context.
 		ctx := context.WithValue(r.Context(), UserKey, email)
 		next(w, r.WithContext(ctx))
 	}

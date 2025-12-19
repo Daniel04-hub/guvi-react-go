@@ -27,7 +27,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Fetch user by email
 	var storedHash string
 	var userID int
 	err := db.SQLClient.QueryRow("SELECT id, password_hash FROM users WHERE email = ?", req.Email).Scan(&userID, &storedHash)
@@ -43,7 +42,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Verify password
 	if err := bcrypt.CompareHashAndPassword([]byte(storedHash), []byte(req.Password)); err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnauthorized)
@@ -51,10 +49,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Generate Token
 	token := uuid.New().String()
 
-	// 4. Store in Redis
 	err = db.RedisClient.Set(context.Background(), token, req.Email, 30*time.Minute).Err()
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -63,7 +59,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 5. Return Token
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"token":   token,
