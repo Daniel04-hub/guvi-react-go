@@ -12,7 +12,7 @@ type User struct {
 
 type Profile struct {
 	Email   string `json:"email" bson:"email"`
-	Age     int    `json:"age" bson:"age"`
+	Age     string `json:"age" bson:"age"`
 	DOB     string `json:"dob" bson:"dob"`
 	Contact string `json:"contact" bson:"contact"`
 	Address string `json:"address" bson:"address"`

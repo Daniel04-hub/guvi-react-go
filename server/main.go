@@ -20,7 +20,9 @@ func main() {
 	}
 
 	// 1. Initialize Database Connections
-	db.Init()
+	db.InitMySQL()
+	db.InitRedis()
+	db.InitMongo()
 
 	// 2. Create Router
 	mux := http.NewServeMux()
@@ -41,9 +43,9 @@ func main() {
 	}))
 
 	// 4. Setup CORS
-	// Allow frontend origin (default Vite port 5173)
+	// Allow all origins to prevent Cross-Origin errors on deployment
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173", "http://127.0.0.1:5173"},
+		AllowedOrigins: []string{"*", "http://16.171.41.227"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders: []string{"Content-Type", "Authorization"},
 	})

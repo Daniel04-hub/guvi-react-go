@@ -6,6 +6,7 @@ import (
 	"guvi-project/db"
 	"guvi-project/middleware"
 	"guvi-project/models"
+	"log"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -35,28 +36,34 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	email, ok := r.Context().Value(middleware.UserKey).(string)
 	if !ok {
+		log.Println("Profile Update Failed: User context missing") // Added log
 		http.Error(w, "Server Error: user context missing", http.StatusInternalServerError)
 		return
 	}
 
-	var req models.Profile
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	// 1. Decode JSON
+	var profile models.Profile
+	if err := json.NewDecoder(r.Body).Decode(&profile); err != nil {
+		log.Println("Profile Update Failed: JSON Decode Error:", err) // Added log
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
 
 	// Force email to match token
-	req.Email = email
+	profile.Email = email
 
-	// Upsert to MongoDB
-	coll := db.MongoClient.Database("guvi_db").Collection("profiles")
-	opts := options.Update().SetUpsert(true)
+	// 2. Upsert into MongoDB
+	// Use Email as the key (from auth middleware context)
 	filter := bson.M{"email": email}
-	update := bson.M{"$set": req}
+	update := bson.M{"$set": profile}
 
-	_, err := coll.UpdateOne(context.Background(), filter, update, opts)
+	opts := options.Update().SetUpsert(true)
+	coll := db.MongoClient.Database("guvi_db").Collection("profiles")
+
+	_, err := coll.UpdateOne(context.Background(), filter, update, opts) // Changed context.TODO() back to context.Background()
 	if err != nil {
-		http.Error(w, "Failed to update profile", http.StatusInternalServerError)
+		log.Println("Profile Update Failed: MongoDB Error:", err) // Added log
+		http.Error(w, "Failed to update profile", http.StatusInternalServerError) // Changed error message
 		return
 	}
 

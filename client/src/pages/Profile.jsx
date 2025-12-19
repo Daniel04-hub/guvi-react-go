@@ -53,8 +53,42 @@ const Profile = () => {
         navigate('/login');
     };
 
+    const validatePhoneNumber = (phone, code) => {
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (code === '+91' || code === '+1') {
+            return cleanPhone.length === 10;
+        }
+        return cleanPhone.length >= 7 && cleanPhone.length <= 15;
+    };
+
+    const validateAge = (dob, age) => {
+        if (!dob || !age) return true; // Skip if empty
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            calculatedAge--;
+        }
+        return parseInt(age) === calculatedAge;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage(''); // Clear previous messages
+
+        // 1. Validate Phone
+        if (!validatePhoneNumber(profile.contact, countryCode)) {
+            setMessage(`Invalid phone number for ${countryCode}. Must be 10 digits.`);
+            return;
+        }
+
+        // 2. Validate Age vs DOB
+        if (!validateAge(profile.dob, profile.age)) {
+            setMessage('Age does not match Date of Birth.');
+            return;
+        }
+
         const token = localStorage.getItem('token');
 
         try {
@@ -143,6 +177,7 @@ const Profile = () => {
                                 className="custom-input"
                                 value={profile.dob}
                                 onChange={handleChange}
+                                max="9999-12-31"
                             />
                         </div>
                     </div>
